@@ -2,8 +2,11 @@ import { CanvasModel } from "../model/CanvasModel";
 import React from "react";
 import { Observable } from "../core/Observable";
 import { Shape } from "../entity/Shape";
-import { DrawingState, ICanvasState, ResizeState } from "./CanvasState";
 import { CanvasEvent } from "./CanvasEvents";
+import { ZOrderAction } from "../model/CanvasModel";
+import { ICanvasState } from "./canvasState/CanvasState";
+import { DrawState } from "./canvasState/DrawState";
+import { ResizeState } from "./canvasState/ResizeState";
 
 export class CanvasViewModel extends Observable<any> {
   private model: CanvasModel;
@@ -14,7 +17,7 @@ export class CanvasViewModel extends Observable<any> {
   constructor(model: CanvasModel) {
     super();
     this.model = model;
-    this.state = new DrawingState(this); //default: 그리기 모드
+    this.state = new DrawState(this); //default: 그리기 모드
   }
 
   setState(state: ICanvasState) {
@@ -44,7 +47,7 @@ export class CanvasViewModel extends Observable<any> {
     this.clearShapes();
     this.clearSelectedShapes();
     this.setShapeType("rectangle"); // default 값으로
-    this.setState(new DrawingState(this));
+    this.setState(new DrawState(this));
     this.notifyShapesUpdated();
   }
 
@@ -112,6 +115,22 @@ export class CanvasViewModel extends Observable<any> {
     return this.model.resizeSelectedShapes(x, y, pos);
   }
 
+  moveForward(shapeId: number) {
+    console.log("forward");
+    return this.model.moveZOrder(shapeId, ZOrderAction.forward); // 앞으로 이동
+  }
+
+  moveBackward(shapeId: number) {
+    return this.model.moveZOrder(shapeId, ZOrderAction.backward); // 뒤로 이동
+  }
+
+  moveToFront(shapeId: number) {
+    return this.model.moveZOrder(shapeId, ZOrderAction.toFront); // 맨 앞으로 이동
+  }
+
+  moveToBack(shapeId: number) {
+    return this.model.moveZOrder(shapeId, ZOrderAction.toBack); // 맨 뒤로 이동
+  }
   notifyShapesUpdated() {
     const event: CanvasEvent<{ shapes: Shape[]; selectedShapes: Shape[] }> = {
       type: "SHAPES_UPDATED",
@@ -124,13 +143,15 @@ export class CanvasViewModel extends Observable<any> {
   }
 
   notifyStateChanged() {
-    const event: CanvasEvent<{ currentState: string, drawingShape?: string }> = {
-      type: "STATE_CHANGED",
-      data: {
-        currentState: this.state.constructor.name,
-        drawingShape: this.state instanceof DrawingState ? this.shapeType : undefined,
-      },
-    };
+    const event: CanvasEvent<{ currentState: string; drawingShape?: string }> =
+      {
+        type: "STATE_CHANGED",
+        data: {
+          currentState: this.state.constructor.name,
+          drawingShape:
+            this.state instanceof DrawState ? this.shapeType : undefined,
+        },
+      };
     this.notify(event);
   }
 }

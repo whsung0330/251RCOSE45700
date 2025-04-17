@@ -15,19 +15,40 @@ interface ShapeCreator {
 
 class RectangleCreator implements ShapeCreator {
   create(props: ShapeProps): Shape {
-    return new Rectangle(props.id, props.startX, props.startY, props.endX, props.endY, props.color);
+    return new Rectangle(
+      props.id,
+      props.startX,
+      props.startY,
+      props.endX,
+      props.endY,
+      props.color
+    );
   }
 }
 
 class EllipseCreator implements ShapeCreator {
   create(props: ShapeProps): Shape {
-    return new Ellipse(props.id, props.startX, props.startY, props.endX, props.endY, props.color);
+    return new Ellipse(
+      props.id,
+      props.startX,
+      props.startY,
+      props.endX,
+      props.endY,
+      props.color
+    );
   }
 }
 
 class LineCreator implements ShapeCreator {
   create(props: ShapeProps): Shape {
-    return new Line(props.id, props.startX, props.startY, props.endX, props.endY, props.color);
+    return new Line(
+      props.id,
+      props.startX,
+      props.startY,
+      props.endX,
+      props.endY,
+      props.color
+    );
   }
 }
 
@@ -37,7 +58,6 @@ export class ShapeFactory {
     ellipse: new EllipseCreator(),
     line: new LineCreator(),
   };
-
 
   static createShape(type: string, props: ShapeProps): Shape {
     const creator = this.creators[type];

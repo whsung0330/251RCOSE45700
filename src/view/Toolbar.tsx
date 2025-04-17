@@ -1,30 +1,33 @@
 import React from "react";
 import { CanvasViewModel } from "../viewModel/CanvasViewModel";
-import { DrawingState, SelectState } from "../viewModel/CanvasState";
 import useCanvasEvent from "../hooks/useCanvasEvent";
 import "./Toolbar.css";
+import { DrawState } from "../viewModel/canvasState/DrawState";
+import { SelectState } from "../viewModel/canvasState/SelectState";
 
 const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
-  const initialState = { currentState: "DrawingState", drawingShape: "rectangle" } // 초기 상태 설정
+  const initialState = {
+    currentState: "DrawingState",
+    drawingShape: "rectangle",
+  }; // 초기 상태 설정
 
-  const currentState = useCanvasEvent<{ currentState: string; drawingShape?: string }>(
-    viewModel,
-    "STATE_CHANGED",
-    initialState,
-    "currentState"
-  );
+  const currentState = useCanvasEvent<{
+    currentState: string;
+    drawingShape?: string;
+  }>(viewModel, "STATE_CHANGED", initialState, "currentState");
 
-  const drawingShape = useCanvasEvent<{ currentState: string; drawingShape?: string }>(
-    viewModel,
-    "STATE_CHANGED",
-    initialState,
-    "drawingShape"
-  );
+  const drawingShape = useCanvasEvent<{
+    currentState: string;
+    drawingShape?: string;
+  }>(viewModel, "STATE_CHANGED", initialState, "drawingShape");
 
   const isActive = (shapeType: string) =>
-    currentState === "DrawingState" && drawingShape === shapeType;
+    currentState === "DrawState" && drawingShape === shapeType;
 
-  const isSelectActive = () => currentState === "SelectState" || currentState === "MoveState";
+  const isSelectActive = () =>
+    currentState === "SelectState" ||
+    currentState === "MoveState" ||
+    currentState === "ResizeState";
 
   return (
     <div className="toolbar">
@@ -32,7 +35,7 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
         className={`tool-button ${isActive("rectangle") ? "active" : ""}`}
         onClick={() => {
           viewModel.setShapeType("rectangle");
-          viewModel.setState(new DrawingState(viewModel));
+          viewModel.setState(new DrawState(viewModel));
         }}
       >
         ▭ 사각형
@@ -42,7 +45,7 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
         className={`tool-button ${isActive("ellipse") ? "active" : ""}`}
         onClick={() => {
           viewModel.setShapeType("ellipse");
-          viewModel.setState(new DrawingState(viewModel));
+          viewModel.setState(new DrawState(viewModel));
         }}
       >
         ◯ 원
@@ -52,7 +55,7 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
         className={`tool-button ${isActive("line") ? "active" : ""}`}
         onClick={() => {
           viewModel.setShapeType("line");
-          viewModel.setState(new DrawingState(viewModel));
+          viewModel.setState(new DrawState(viewModel));
         }}
       >
         ㅡ 선
@@ -67,7 +70,7 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
       >
         선택
       </button>
-      
+
       <button
         className={`tool-button`}
         onClick={() => {
