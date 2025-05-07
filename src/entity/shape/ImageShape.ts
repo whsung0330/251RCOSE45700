@@ -9,9 +9,8 @@ export class ImageShape extends AbstractShape {
     endX: number,
     endY: number,
     public imageUrl: string,
-    color?: string,
   ) {
-      super(id, startX, startY, endX, endY, color);
+      super(id, startX, startY, endX, endY);
   }
   private borderWidth: number = 0;
   private borderColor: string = "#000000";

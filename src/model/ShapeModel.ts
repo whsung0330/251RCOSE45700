@@ -1,5 +1,8 @@
+import { CANVAS, DEFAULT_SHAPE } from "../constants";
+import { TextShape } from "../entity/shape";
 import { Shape } from "../entity/shape/Shape";
 import { ShapeFactory } from "../entity/shape/ShapeFactory";
+import { TextShapeProps } from "../entity/shape/TextShape";
 
 export class ShapeModel {
   private shapes: Shape[] = [];
@@ -113,25 +116,52 @@ export class ShapeModel {
     } else return sortedShapes as Shape[];
   }
 
-  setProperty(shapeId: number, propertyName: string, value: any): void {
+  setProperty(shapeId: number, propertyName: string, value: any): Shape {
     const shape = this.shapes.find((shape) => shape.id === shapeId);
     if (shape) {
       shape.setProperties(propertyName, value);
+      return shape;
     } else {
       throw new Error("Shape not found.");
     }
   }
 
-  addImageShape(imageUrl: string, width: number, height: number) {
-    const shape = ShapeFactory.createShape("image", {
-      id: Date.now(),
-      startX: 0,
-      startY: 0,
-      endX: width,
-      endY: height,
-      imageUrl: imageUrl,
+  addTemplateShape(type: string, properties: any): Shape {
+    const defaultWidth = properties.width || DEFAULT_SHAPE.WIDTH;
+    const defaultHeight = properties.height || DEFAULT_SHAPE.HEIGHT;
+
+    const startX = properties.startX ?? (CANVAS.WIDTH - defaultWidth) / 2;
+    const startY = properties.startY ?? (CANVAS.HEIGHT - defaultHeight) / 2;
+
+    const shape = ShapeFactory.createShape(type, {
+      id: this.countShapes(),
+      startX,
+      startY,
+      endX: startX + defaultWidth,
+      endY: startY + defaultHeight,
+      color: properties.color || DEFAULT_SHAPE.COLOR,
+      ...properties,
     });
     this.addShape(shape);
     return shape;
+  }
+
+  getTextShapeProperties(shapeId: number): TextShapeProps {
+    const shape = this.shapes.find((s) => s.id === shapeId);
+    // 일단은 TextShape에 대한 기능부터 구현하자 싶어서 if문 만들었습니다! 추후 제거 예정
+    if (!(shape instanceof TextShape)) throw new Error("Requested shape is not a TextShape.");
+    
+  
+    return {
+      id: shape.id,
+      textContent: shape.textContent,
+      startX: shape.startX,
+      startY: shape.startY,
+      endX: shape.endX,
+      endY: shape.endY,
+      fontSize: shape.fontSize,
+      fontFamily: shape.fontFamily,
+      color: shape.color,
+    };
   }
 }

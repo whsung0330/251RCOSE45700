@@ -1,3 +1,4 @@
+import { DEFAULT_SHAPE } from "../../constants";
 import { Property, PropertyHandler } from "../property/PropertyHandlers";
 
 export interface Shape {
@@ -29,8 +30,10 @@ export abstract class AbstractShape implements Shape {
       public startY: number,
       public endX: number,
       public endY: number,
-      public color: string = "#000000",
   ) {}
+  textContent: string = DEFAULT_SHAPE.TEXT_CONTENT;
+  color: string = "#000000";
+
   shadowColor: string = "#000000";
   shadowOffsetX: number = 0;
   shadowOffsetY: number = 0;

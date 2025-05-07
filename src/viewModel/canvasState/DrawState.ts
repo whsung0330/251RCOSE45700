@@ -44,4 +44,5 @@ export class DrawState implements ICanvasState {
       new SelectState(this.viewModel, this.shapeModel, this.selectedShapeModel)
     ); // switch back to select state
   }
+  handleDoubleClick(event: React.MouseEvent): void {}
 }

@@ -78,6 +78,12 @@ export const CommonPropertyHandlers = {
     getValue: (shape) => shape.shadowColor,
     setValue: (shape, value) => { shape.shadowColor = value.toString(); },
   }),
+  textContentHandler: <T extends { textContent: string }> (): PropertyHandler<T> => ({
+    type: PROPERTY_TYPES.TEXT,
+    name: PROPERTY_NAMES.TEXT_CONTENT,
+    getValue: (shape) => shape.textContent,
+    setValue: (shape, value) => { shape.textContent = value.toString(); },
+  }),
 };
 
 export const BorderedShapePropertyHandlers = {

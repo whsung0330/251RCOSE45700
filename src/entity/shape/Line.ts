@@ -9,11 +9,10 @@ export class Line extends AbstractShape {
     startY: number,
     endX: number,
     endY: number,
-    color?: string,
-    public lineWidth: number = 1 // Line 고유 속성
   ) {
-    super(id, startX, startY, endX, endY, color);
+    super(id, startX, startY, endX, endY);
   }
+  lineWidth: number = 1;
 
   get dx(): number {
     return this.endX - this.startX;

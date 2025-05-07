@@ -4,15 +4,18 @@ export const CANVAS = {
 }
 
 export const DEFAULT_SHAPE = {
-  WIDTH: 200,
+  WIDTH: 300,
   HEIGHT: 100,
+  COLOR: '#000000',
   FONT_SIZE: 30,
+  TEXT_CONTENT: 'Enter text here.',
+  FONT_FAMILY: 'Arial',
 }
 
 export const PROPERTY_NAMES = {
   COLOR: "색",
-  TEXT: "텍스트",
-  FONT: "폰트",
+  TEXT_CONTENT: "텍스트",
+  FONT_FAMILY: "폰트",
   FONT_SIZE: "글자 크기",
   WIDTH: "너비",
   HEIGHT: "높이",
@@ -37,5 +40,12 @@ export const PROPERTY_TYPES = {
 };
 
 export const DROPDOWN_OPTIONS: { [key: string]: string[] } = {
-  [PROPERTY_NAMES.FONT]: ["Arial", "Sans Serif"],
+  [PROPERTY_NAMES.FONT_FAMILY]: [
+    "Arial",
+    "Times New Roman",
+    "Tahoma",
+    "Georgia",
+    "Courier New",
+    "Brush Script MT"
+  ],
 };

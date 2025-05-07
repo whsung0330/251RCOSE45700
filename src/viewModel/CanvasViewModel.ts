@@ -8,10 +8,7 @@ import { DrawState } from "./canvasState/DrawState";
 import { ResizeState } from "./canvasState/ResizeState";
 import { SelectedShapeModel } from "../model/SelectedShapeModel";
 import { CanvasStateCommandFactory } from "./canvasState/CanvasStateCommandFactory";
-import { CanvasResetCommand } from "../command/CanvasResetCommand";
-import { ZOrderMoveCommand } from "../command/ZOrderMoveCommand";
-import { SetPropertyCommand } from "../command/SetPropertyCommand";
-import { AddImageShapeCommand } from "../command/AddImageShapeCommand";
+import { AddTemplateShapeCommand, CanvasResetCommand, SetPropertyCommand, ZOrderMoveCommand } from "../command";
 
 export class CanvasViewModel extends Observable<any> {
   private shapeModel: ShapeModel;
@@ -60,6 +57,11 @@ export class CanvasViewModel extends Observable<any> {
     this.state.handleMouseUp();
     this.notifyShapesUpdated();
   };
+
+  handleDoubleClick = (event: React.MouseEvent) => {
+    this.state.handleDoubleClick(event);
+    this.notifyShapesUpdated(); 
+  }
 
   requestResetCanvas() {
     const command = new CanvasResetCommand(
@@ -126,14 +128,13 @@ export class CanvasViewModel extends Observable<any> {
     this.notifyShapesUpdated();
   }
 
-  requestAddImageShape(imageUrl: string, width: number, height: number) {
-    const command = new AddImageShapeCommand(
+  requestAddTemplateShape(type: string, properties: any) {
+    const command = new AddTemplateShapeCommand(
       this,
       this.shapeModel,
       this.selectedShapeModel,
-      imageUrl,
-      width,
-      height
+      type,
+      properties,
     );
     command.execute();
     this.notifyShapesUpdated();

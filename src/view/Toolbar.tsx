@@ -2,6 +2,7 @@ import React from "react";
 import { CanvasViewModel } from "../viewModel/CanvasViewModel";
 import useCanvasEvent from "../hooks/useCanvasEvent";
 import "./Toolbar.css";
+import { DEFAULT_SHAPE } from "../constants";
 
 const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
   const initialState = {
@@ -78,10 +79,14 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
                 img.src = imageUrl;
                 img.onload = () => {
                   const aspectRatio = img.width / img.height;
-                  const baseWidth = 150; // 기본 너비
+                  const baseWidth = DEFAULT_SHAPE.WIDTH;
                   const baseHeight = Math.round(baseWidth / aspectRatio); // 비율에 따른 높이 계산
 
-                  viewModel.requestAddImageShape(imageUrl, baseWidth, baseHeight);
+                  viewModel.requestAddTemplateShape("image", {
+                    imageUrl,
+                    width: baseWidth,
+                    height: baseHeight,
+                  });
 
                   viewModel.setShapeType("");
                   viewModel.requestSetState("SelectState", {});
@@ -98,6 +103,19 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
             event.target.value = "";
           }}
         />
+      </button>
+      <button
+        className={`tool-button ${isActive("text") ? "active" : ""}`}
+        onClick={() => {
+          viewModel.requestAddTemplateShape("text", {
+            width: DEFAULT_SHAPE.WIDTH,
+            height: DEFAULT_SHAPE.HEIGHT,
+          })
+          viewModel.setShapeType("");
+          viewModel.requestSetState("SelectState", {});
+        }}
+      >
+        텍스트
       </button>
 
       <button

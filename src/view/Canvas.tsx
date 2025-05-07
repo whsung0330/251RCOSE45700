@@ -3,6 +3,7 @@ import { CanvasViewModel } from "../viewModel/CanvasViewModel";
 import { Shape } from "../entity/shape/Shape";
 import useCanvasEvent from "../hooks/useCanvasEvent";
 import { CANVAS } from "../constants";
+import "./Canvas.css";
 
 const Canvas: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -43,6 +44,7 @@ const Canvas: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
       onMouseDown={viewModel.handleMouseDown}
       onMouseMove={viewModel.handleMouseMove}
       onMouseUp={viewModel.handleMouseUp}
+      onDoubleClick={viewModel.handleDoubleClick}
       style={{ border: "1px solid black" }}
     />
   );

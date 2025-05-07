@@ -1,4 +1,4 @@
-import { SetStateCommand } from "../../command/CanvasStateCommand";
+import { SetStateCommand } from "../../command/SetStateCommand";
 import { Command } from "../../command/Command";
 import { SelectedShapeModel } from "../../model/SelectedShapeModel";
 import { ShapeModel } from "../../model/ShapeModel";

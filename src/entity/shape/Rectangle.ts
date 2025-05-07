@@ -2,16 +2,6 @@ import { BorderedShapePropertyHandlers, CommonPropertyHandlers, PropertyHandler 
 import { AbstractShape } from "./Shape";
 
 export class Rectangle extends AbstractShape {
-  constructor(
-    id: number,
-    startX: number,
-    startY: number,
-    endX: number,
-    endY: number,
-    color?: string
-  ) {
-      super(id, startX, startY, endX, endY, color);
-  }
   borderWidth: number = 0;
   borderColor: string = "#000000";
 

@@ -3,16 +3,6 @@ import { BorderedShapePropertyHandlers, CommonPropertyHandlers, PropertyHandler 
 import { AbstractShape } from "./Shape";
 
 export class Ellipse extends AbstractShape {
-  constructor(
-    id: number,
-    startX: number,
-    startY: number,
-    endX: number,
-    endY: number,
-    color?: string
-  ) {
-      super(id, startX, startY, endX, endY, color);
-  }
   private borderWidth: number = 0;
   private borderColor: string = "#000000";
 
