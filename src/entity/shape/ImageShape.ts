@@ -1,4 +1,8 @@
-import { BorderedShapePropertyHandlers, CommonPropertyHandlers, PropertyHandler } from "../property/PropertyHandlers";
+import {
+  BorderedShapePropertyHandlers,
+  CommonPropertyHandlers,
+  PropertyHandler,
+} from "../property/PropertyHandlers";
 import { AbstractShape } from "./Shape";
 
 export class ImageShape extends AbstractShape {
@@ -8,9 +12,9 @@ export class ImageShape extends AbstractShape {
     startY: number,
     endX: number,
     endY: number,
-    public imageUrl: string,
+    public imageUrl: string
   ) {
-      super(id, startX, startY, endX, endY);
+    super(id, startX, startY, endX, endY);
   }
   private borderWidth: number = 0;
   private borderColor: string = "#000000";
@@ -19,8 +23,10 @@ export class ImageShape extends AbstractShape {
 
   draw(ctx: CanvasRenderingContext2D | null): void {
     if (!ctx) throw new Error("context is null");
+    ctx.save();
 
     this.setShadow(ctx);
+    this.drawFrame(ctx); // 테두리 그림자 반영하기
 
     if (!this.imageElement) {
       this.imageElement = new Image();
@@ -44,6 +50,12 @@ export class ImageShape extends AbstractShape {
       );
     }
 
+    ctx.restore();
+    this.drawFrame(ctx);
+    ctx.restore();
+  }
+
+  drawFrame(ctx: CanvasRenderingContext2D) {
     if (this.borderWidth > 0) {
       ctx.strokeStyle = this.borderColor;
       ctx.lineWidth = this.borderWidth;
@@ -60,20 +72,23 @@ export class ImageShape extends AbstractShape {
     );
   }
 
-
   protected getPropertyHandlers(): PropertyHandler<this>[] {
     return [
-        CommonPropertyHandlers.HorizontalPos(),
-        CommonPropertyHandlers.VerticalPos(),
-        CommonPropertyHandlers.Width(),
-        CommonPropertyHandlers.Height(),
-        CommonPropertyHandlers.Color(),
-        CommonPropertyHandlers.ShadowAngle(),
-        CommonPropertyHandlers.ShadowRadius(),
-        CommonPropertyHandlers.ShadowBlur(),
-        CommonPropertyHandlers.ShadowColor(),
-        BorderedShapePropertyHandlers.BorderWidth<this & { borderWidth: number }>(),
-        BorderedShapePropertyHandlers.BorderColor<this & { borderColor: string }>(),
+      CommonPropertyHandlers.HorizontalPos(),
+      CommonPropertyHandlers.VerticalPos(),
+      CommonPropertyHandlers.Width(),
+      CommonPropertyHandlers.Height(),
+      CommonPropertyHandlers.Color(),
+      CommonPropertyHandlers.ShadowAngle(),
+      CommonPropertyHandlers.ShadowRadius(),
+      CommonPropertyHandlers.ShadowBlur(),
+      CommonPropertyHandlers.ShadowColor(),
+      BorderedShapePropertyHandlers.BorderWidth<
+        this & { borderWidth: number }
+      >(),
+      BorderedShapePropertyHandlers.BorderColor<
+        this & { borderColor: string }
+      >(),
     ];
   }
 }

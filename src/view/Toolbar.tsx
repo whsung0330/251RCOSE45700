@@ -33,7 +33,6 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
       <button
         className={`tool-button ${isActive("rectangle") ? "active" : ""}`}
         onClick={() => {
-          viewModel.setShapeType("rectangle");
           viewModel.requestSetState("DrawState", { shapeType: "rectangle" });
         }}
       >
@@ -43,7 +42,6 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
       <button
         className={`tool-button ${isActive("ellipse") ? "active" : ""}`}
         onClick={() => {
-          viewModel.setShapeType("ellipse");
           viewModel.requestSetState("DrawState", { shapeType: "ellipse" });
         }}
       >
@@ -53,7 +51,6 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
       <button
         className={`tool-button ${isActive("line") ? "active" : ""}`}
         onClick={() => {
-          viewModel.setShapeType("line");
           viewModel.requestSetState("DrawState", { shapeType: "line" });
         }}
       >
@@ -88,7 +85,6 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
                     height: baseHeight,
                   });
 
-                  viewModel.setShapeType("");
                   viewModel.requestSetState("SelectState", {});
                 };
                 img.onerror = () => {
@@ -110,8 +106,7 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
           viewModel.requestAddTemplateShape("text", {
             width: DEFAULT_SHAPE.WIDTH,
             height: DEFAULT_SHAPE.HEIGHT,
-          })
-          viewModel.setShapeType("");
+          });
           viewModel.requestSetState("SelectState", {});
         }}
       >
@@ -121,7 +116,6 @@ const Toolbar: React.FC<{ viewModel: CanvasViewModel }> = ({ viewModel }) => {
       <button
         className={`tool-button ${isSelectActive() ? "active" : ""}`}
         onClick={() => {
-          viewModel.setShapeType("");
           viewModel.requestSetState("SelectState", {});
         }}
       >

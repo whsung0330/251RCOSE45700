@@ -1,31 +1,27 @@
 import { PROPERTY_NAMES, PROPERTY_TYPES } from "../../constants";
-import { CommonPropertyHandlers, PropertyHandler } from "../property/PropertyHandlers";
+import {
+  CommonPropertyHandlers,
+  PropertyHandler,
+} from "../property/PropertyHandlers";
 import { AbstractShape } from "./Shape";
 
 export class Line extends AbstractShape {
-  constructor(
-    id: number,
-    startX: number,
-    startY: number,
-    endX: number,
-    endY: number,
-  ) {
-    super(id, startX, startY, endX, endY);
-  }
   lineWidth: number = 1;
 
   get dx(): number {
     return this.endX - this.startX;
   }
   get dy(): number {
-      return this.endY - this.startY;
+    return this.endY - this.startY;
   }
   get length(): number {
-      return Math.sqrt(this.dx * this.dx + this.dy * this.dy);
+    return Math.sqrt(this.dx * this.dx + this.dy * this.dy);
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
     if (!ctx) throw new Error("context is null");
+    ctx.save();
+
     ctx.strokeStyle = this.color;
     ctx.lineWidth = this.lineWidth;
     this.setShadow(ctx);
@@ -33,6 +29,9 @@ export class Line extends AbstractShape {
     ctx.moveTo(this.startX, this.startY);
     ctx.lineTo(this.endX, this.endY);
     ctx.stroke();
+    ctx.closePath();
+
+    ctx.restore();
   }
 
   override getResizeHandles(): { x: number; y: number; pos: string }[] {
@@ -107,21 +106,21 @@ export class Line extends AbstractShape {
     name: PROPERTY_NAMES.LINEWIDTH,
     getValue: (shape) => shape.lineWidth,
     setValue: (shape, value) => {
-        shape.lineWidth = Number(value);
+      shape.lineWidth = Number(value);
     },
   });
 
   protected getPropertyHandlers(): PropertyHandler<this>[] {
     return [
-        CommonPropertyHandlers.HorizontalPos(),
-        CommonPropertyHandlers.VerticalPos(),
-        Line.LengthHandler(),
-        Line.LineWidthHandler(),
-        CommonPropertyHandlers.Color(),
-        CommonPropertyHandlers.ShadowAngle(),
-        CommonPropertyHandlers.ShadowRadius(),
-        CommonPropertyHandlers.ShadowBlur(),
-        CommonPropertyHandlers.ShadowColor(),
+      CommonPropertyHandlers.HorizontalPos(),
+      CommonPropertyHandlers.VerticalPos(),
+      Line.LengthHandler(),
+      Line.LineWidthHandler(),
+      CommonPropertyHandlers.Color(),
+      CommonPropertyHandlers.ShadowAngle(),
+      CommonPropertyHandlers.ShadowRadius(),
+      CommonPropertyHandlers.ShadowBlur(),
+      CommonPropertyHandlers.ShadowColor(),
     ];
   }
 }

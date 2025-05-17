@@ -1,5 +1,9 @@
 import { PROPERTY_NAMES, PROPERTY_TYPES } from "../../constants";
-import { BorderedShapePropertyHandlers, CommonPropertyHandlers, PropertyHandler } from "../property/PropertyHandlers";
+import {
+  BorderedShapePropertyHandlers,
+  CommonPropertyHandlers,
+  PropertyHandler,
+} from "../property/PropertyHandlers";
 import { AbstractShape } from "./Shape";
 
 export class Ellipse extends AbstractShape {
@@ -15,10 +19,11 @@ export class Ellipse extends AbstractShape {
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    ctx.strokeStyle = this.borderColor;
-    ctx.lineWidth = this.borderWidth;
+    if (!ctx) throw new Error("context is null");
+    ctx.save();
 
     this.setShadow(ctx);
+    this.drawFrame(ctx); // 테두리 그림자 반영하기
     ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.ellipse(
@@ -33,6 +38,14 @@ export class Ellipse extends AbstractShape {
     ctx.fill();
     ctx.closePath();
 
+    ctx.restore();
+    this.drawFrame(ctx);
+    ctx.restore();
+  }
+
+  drawFrame(ctx: CanvasRenderingContext2D) {
+    ctx.strokeStyle = this.borderColor;
+    ctx.lineWidth = this.borderWidth;
     if (this.borderWidth > 0) {
       ctx.beginPath();
       ctx.ellipse(
@@ -48,7 +61,6 @@ export class Ellipse extends AbstractShape {
       ctx.closePath();
     }
   }
-
   isPointInside(x: number, y: number): boolean {
     const centerX = this.centerX;
     const centerY = this.centerY;
@@ -72,7 +84,7 @@ export class Ellipse extends AbstractShape {
       const centerX = shape.centerX;
       shape.startX = centerX - Number(value) / 2;
       shape.endX = centerX + Number(value) / 2;
-    }
+    },
   });
   private static HeightHandler = (): PropertyHandler<Ellipse> => ({
     type: PROPERTY_TYPES.NUMBER,
@@ -82,21 +94,25 @@ export class Ellipse extends AbstractShape {
       const centerY = shape.centerY;
       shape.startY = centerY - Number(value) / 2;
       shape.endY = centerY + Number(value) / 2;
-    }
+    },
   });
   protected getPropertyHandlers(): PropertyHandler<this>[] {
-      return [
-          CommonPropertyHandlers.HorizontalPos(),
-          CommonPropertyHandlers.VerticalPos(),
-          Ellipse.WidthHandler(),
-          Ellipse.HeightHandler(),
-          CommonPropertyHandlers.Color(),
-          CommonPropertyHandlers.ShadowAngle(),
-          CommonPropertyHandlers.ShadowRadius(),
-          CommonPropertyHandlers.ShadowBlur(),
-          CommonPropertyHandlers.ShadowColor(),
-          BorderedShapePropertyHandlers.BorderWidth<this & { borderWidth: number }>(),
-          BorderedShapePropertyHandlers.BorderColor<this & { borderColor: string }>(),
-      ];
+    return [
+      CommonPropertyHandlers.HorizontalPos(),
+      CommonPropertyHandlers.VerticalPos(),
+      Ellipse.WidthHandler(),
+      Ellipse.HeightHandler(),
+      CommonPropertyHandlers.Color(),
+      CommonPropertyHandlers.ShadowAngle(),
+      CommonPropertyHandlers.ShadowRadius(),
+      CommonPropertyHandlers.ShadowBlur(),
+      CommonPropertyHandlers.ShadowColor(),
+      BorderedShapePropertyHandlers.BorderWidth<
+        this & { borderWidth: number }
+      >(),
+      BorderedShapePropertyHandlers.BorderColor<
+        this & { borderColor: string }
+      >(),
+    ];
   }
 }

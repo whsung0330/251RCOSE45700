@@ -8,7 +8,12 @@ import { DrawState } from "./canvasState/DrawState";
 import { ResizeState } from "./canvasState/ResizeState";
 import { SelectedShapeModel } from "../model/SelectedShapeModel";
 import { CanvasStateCommandFactory } from "./canvasState/CanvasStateCommandFactory";
-import { AddTemplateShapeCommand, CanvasResetCommand, SetPropertyCommand, ZOrderMoveCommand } from "../command";
+import {
+  AddTemplateShapeCommand,
+  CanvasResetCommand,
+  SetPropertyCommand,
+  ZOrderMoveCommand,
+} from "../command";
 
 export class CanvasViewModel extends Observable<any> {
   private shapeModel: ShapeModel;
@@ -60,8 +65,8 @@ export class CanvasViewModel extends Observable<any> {
 
   handleDoubleClick = (event: React.MouseEvent) => {
     this.state.handleDoubleClick(event);
-    this.notifyShapesUpdated(); 
-  }
+    this.notifyShapesUpdated();
+  };
 
   requestResetCanvas() {
     const command = new CanvasResetCommand(
@@ -96,6 +101,9 @@ export class CanvasViewModel extends Observable<any> {
   }
 
   requestSetState(stateType: string, params: any) {
+    if (stateType === "DrawState") {
+      this.setShapeType(params.shapeType); // shapeType을 DrawState에 전달
+    } else this.setShapeType("");
     const command = this.canvasStateCommandFactory.createCommand(
       stateType,
       params
@@ -134,7 +142,7 @@ export class CanvasViewModel extends Observable<any> {
       this.shapeModel,
       this.selectedShapeModel,
       type,
-      properties,
+      properties
     );
     command.execute();
     this.notifyShapesUpdated();
