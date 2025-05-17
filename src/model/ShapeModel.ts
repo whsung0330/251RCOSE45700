@@ -62,46 +62,8 @@ export class ShapeModel {
     }
   }
 
-  //z-order 관련
-  moveZOrder(shapeId: number, action: string): void {
-    const index = this.zOrder.indexOf(shapeId);
-    if (index === -1) {
-      throw new Error("Shape ID not found in z-order mapping.");
-    }
-
-    // z-order 변경 로직
-    switch (
-      action //TODO: moveZOrder를 strategy로 분리하기?
-    ) {
-      case "forward":
-        if (index < this.zOrder.length - 1) {
-          [this.zOrder[index], this.zOrder[index + 1]] = [
-            this.zOrder[index + 1],
-            this.zOrder[index],
-          ];
-        }
-        break;
-      case "backward":
-        if (index > 0) {
-          [this.zOrder[index], this.zOrder[index - 1]] = [
-            this.zOrder[index - 1],
-            this.zOrder[index],
-          ];
-        }
-        break;
-      case "toFront":
-        const shapeIdToBack = this.zOrder.splice(index, 1)[0];
-        this.zOrder.push(shapeIdToBack);
-        break;
-      case "toBack":
-        const shapeIdToFront = this.zOrder.splice(index, 1)[0];
-        this.zOrder.unshift(shapeIdToFront);
-        break;
-      default:
-        throw new Error("Invalid z-order action.");
-    }
-
-    console.log(this.getShapesByZOrder());
+  getZOrder(): number[] {
+    return this.zOrder;
   }
 
   getShapesByZOrder(): Shape[] {
